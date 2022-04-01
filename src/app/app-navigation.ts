@@ -24,15 +24,15 @@ export const navigation = [
     items: [
       {
         text: 'Producers',
-        path: '/produces'
+        path: 'clients/producers'
       },
       {
         text: 'Technicians',
-        path: '/technicians'
+        path: 'technicians'
       },
       {
         text: 'Observers',
-        path: '/observers'
+        path: 'observers'
       }
     ]
   }

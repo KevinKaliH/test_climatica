@@ -6,6 +6,7 @@ import { HomeComponent } from './pages/home/home.component';
 import { ProfileComponent } from './pages/profile/profile.component';
 import { TasksComponent } from './pages/tasks/tasks.component';
 import { DxDataGridModule, DxFormModule } from 'devextreme-angular';
+import {ProducersComponent} from "./pages/producers/producers.component";
 
 const routes: Routes = [
   {
@@ -22,6 +23,16 @@ const routes: Routes = [
     path: 'home',
     component: HomeComponent,
     canActivate: [ AuthGuardService ]
+  },
+  {
+    path: 'clients',
+    canActivate: [ AuthGuardService ],
+    children: [
+      {
+        path: 'producers',
+        component: ProducersComponent
+      }
+    ]
   },
   {
     path: 'login-form',
@@ -56,7 +67,8 @@ const routes: Routes = [
   declarations: [
     HomeComponent,
     ProfileComponent,
-    TasksComponent
+    TasksComponent,
+    ProducersComponent
   ]
 })
 export class AppRoutingModule { }
