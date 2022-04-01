@@ -1,5 +1,9 @@
-import { Injectable } from '@angular/core';
-import { CanActivate, Router, ActivatedRouteSnapshot } from '@angular/router';
+import {Injectable} from '@angular/core';
+import {CanActivate, Router, ActivatedRouteSnapshot} from '@angular/router';
+import {HttpClient} from "@angular/common/http";
+import {environment} from "../../../environments/environment";
+import {lastValueFrom} from "rxjs";
+import {IGenericResponse} from "../models/generic-response.model";
 
 export interface IUser {
   email: string;
@@ -7,16 +11,23 @@ export interface IUser {
 }
 
 const defaultPath = '/';
-const defaultUser = {
-  email: 'sandra@example.com',
-  avatarUrl: 'https://js.devexpress.com/Demos/WidgetsGallery/JSDemos/images/employees/06.png'
-};
 
 @Injectable()
 export class AuthService {
-  private _user: IUser | null = defaultUser;
+  private _user: IUser | null = null;
+
   get loggedIn(): boolean {
-    return !!this._user;
+    const token = localStorage.getItem('token_id');
+    const getUser = JSON.parse(localStorage.getItem('user-data') ?? '{}');
+
+    if (getUser != undefined && this._user == null) {
+      this._user = {
+        avatarUrl: getUser.avatarUrl,
+        email: getUser.email
+      }
+    }
+
+    return token != undefined;
   }
 
   private _lastAuthenticatedPath: string = defaultPath;
@@ -24,22 +35,41 @@ export class AuthService {
     this._lastAuthenticatedPath = value;
   }
 
-  constructor(private router: Router) { }
+  constructor(private router: Router, private http: HttpClient) {
+  }
 
   async logIn(email: string, password: string) {
 
     try {
       // Send request
-      console.log(email, password);
-      this._user = { ...defaultUser, email };
+      const query = this.http.post<IGenericResponse>(`${environment.webApi}/account`, {
+        usuario: email,
+        password: password
+      });
+      const result = await lastValueFrom(query);
+      console.log(result);
+
+      if (result.success) {
+        this._user = {
+          avatarUrl: 'https://js.devexpress.com/Demos/WidgetsGallery/JSDemos/images/employees/06.png',
+          email: result.data.dbUser.nombrePersonal
+        };
+
+        localStorage.setItem('token_id', result.data.token);
+        localStorage.setItem('user-data', JSON.stringify({
+          avatarUrl: 'https://js.devexpress.com/Demos/WidgetsGallery/JSDemos/images/employees/06.png',
+          email: result.data.dbUser.nombrePersonal
+        }))
+      }
+
       this.router.navigate([this._lastAuthenticatedPath]);
 
       return {
-        isOk: true,
-        data: this._user
+        isOk: result.success,
+        data: this._user,
+        message: result.message === '' && 'Credentials are invalid'
       };
-    }
-    catch {
+    } catch {
       return {
         isOk: false,
         message: "Authentication failed"
@@ -55,8 +85,7 @@ export class AuthService {
         isOk: true,
         data: this._user
       };
-    }
-    catch {
+    } catch {
       return {
         isOk: false,
         data: null
@@ -73,8 +102,7 @@ export class AuthService {
       return {
         isOk: true
       };
-    }
-    catch {
+    } catch {
       return {
         isOk: false,
         message: "Failed to create account"
@@ -90,13 +118,13 @@ export class AuthService {
       return {
         isOk: true
       };
-    }
-    catch {
+    } catch {
       return {
         isOk: false,
         message: "Failed to change password"
       }
-    };
+    }
+    ;
   }
 
   async resetPassword(email: string) {
@@ -107,8 +135,7 @@ export class AuthService {
       return {
         isOk: true
       };
-    }
-    catch {
+    } catch {
       return {
         isOk: false,
         message: "Failed to reset password"
@@ -118,13 +145,15 @@ export class AuthService {
 
   async logOut() {
     this._user = null;
+    localStorage.clear();
     this.router.navigate(['/login-form']);
   }
 }
 
 @Injectable()
 export class AuthGuardService implements CanActivate {
-  constructor(private router: Router, private authService: AuthService) { }
+  constructor(private router: Router, private authService: AuthService) {
+  }
 
   canActivate(route: ActivatedRouteSnapshot): boolean {
     const isLoggedIn = this.authService.loggedIn;

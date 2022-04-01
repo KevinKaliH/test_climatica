@@ -17,5 +17,23 @@ export const navigation = [
         path: '/tasks'
       }
     ]
+  },
+  {
+    text: 'Clients',
+    icon: 'folder',
+    items: [
+      {
+        text: 'Producers',
+        path: '/produces'
+      },
+      {
+        text: 'Technicians',
+        path: '/technicians'
+      },
+      {
+        text: 'Observers',
+        path: '/observers'
+      }
+    ]
   }
 ];
