@@ -1,0 +1,14 @@
+
+.header-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header-menu {
+    ul {
+        display: flex;
+        gap: 12px;
+        list-style: none;
+    }
+}

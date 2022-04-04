@@ -8,6 +8,7 @@ import { AuthService, ScreenService, AppInfoService } from './shared/services';
 import { UnauthenticatedContentModule } from './unauthenticated-content';
 import { AppRoutingModule } from './app-routing.module';
 import {HttpClientModule} from "@angular/common/http";
+import { ProducersModule } from './pages/producers/producers.module';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,9 @@ import {HttpClientModule} from "@angular/common/http";
     LoginFormModule,
     UnauthenticatedContentModule,
     AppRoutingModule,
-    HttpClientModule
+    HttpClientModule,
+
+    ProducersModule
   ],
   providers: [
     AuthService,

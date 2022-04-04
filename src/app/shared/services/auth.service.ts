@@ -42,33 +42,50 @@ export class AuthService {
 
     try {
       // Send request
-      const query = this.http.post<IGenericResponse>(`${environment.webApi}/account`, {
-        usuario: email,
-        password: password
-      });
-      const result = await lastValueFrom(query);
-      console.log(result);
+      // const query = this.http.post<IGenericResponse>(`${environment.webApi}/account`, {
+      //   usuario: email,
+      //   password: password
+      // });
+      // const result = await lastValueFrom(query);
 
-      if (result.success) {
-        this._user = {
-          avatarUrl: 'https://js.devexpress.com/Demos/WidgetsGallery/JSDemos/images/employees/06.png',
-          email: result.data.dbUser.nombrePersonal
-        };
+      // if (result.success) {
+      //   this._user = {
+      //     avatarUrl: 'https://js.devexpress.com/Demos/WidgetsGallery/JSDemos/images/employees/06.png',
+      //     email: result.data.dbUser.nombrePersonal
+      //   };
 
-        localStorage.setItem('token_id', result.data.token);
-        localStorage.setItem('user-data', JSON.stringify({
-          avatarUrl: 'https://js.devexpress.com/Demos/WidgetsGallery/JSDemos/images/employees/06.png',
-          email: result.data.dbUser.nombrePersonal
-        }))
+      //   localStorage.setItem('token_id', result.data.token);
+      //   localStorage.setItem('user-data', JSON.stringify({
+      //     avatarUrl: 'https://js.devexpress.com/Demos/WidgetsGallery/JSDemos/images/employees/06.png',
+      //     email: result.data.dbUser.nombrePersonal
+      //   }))
+      // }
+
+      // this.router.navigate([this._lastAuthenticatedPath]);
+
+      // return {
+      //   isOk: result.success,
+      //   data: this._user,
+      //   message: result.message === '' && 'Credentials are invalid'
+      // };
+
+      this._user = {
+        email: email,
+        avatarUrl: 'https://js.devexpress.com/Demos/WidgetsGallery/JSDemos/images/employees/06.png'
       }
 
-      this.router.navigate([this._lastAuthenticatedPath]);
+      localStorage.setItem('token_id', 'awdasdasd');
+      localStorage.setItem('user-data', JSON.stringify({
+        avatarUrl: 'https://js.devexpress.com/Demos/WidgetsGallery/JSDemos/images/employees/06.png',
+        email: email
+      }))
 
+      this.router.navigate([this._lastAuthenticatedPath]);
       return {
-        isOk: result.success,
+        isOk: true,
         data: this._user,
-        message: result.message === '' && 'Credentials are invalid'
-      };
+        message: 'tuani ok'
+      }
     } catch {
       return {
         isOk: false,

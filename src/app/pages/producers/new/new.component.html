@@ -1,0 +1,67 @@
+<h2 class="content-block">New Producer</h2>
+<form action="/employee-page" (submit)="handleSubmit($event)">
+        <dx-form
+            id="form"
+            [formData]="employee"
+            [readOnly]="isFormReadOnly"
+            labelLocation="top"
+            [showColonAfterLabel]="false">
+            <dxi-item 
+                itemType="group" 
+                [colCount]="2">
+                <dxi-item 
+                    itemType="group" 
+                    caption="Employee">
+                    
+                    <dxi-item dataField="name" [isRequired]="true"></dxi-item>
+
+                    <dxi-item dataField="position"></dxi-item>
+                    
+                    <dxi-item dataField="hireDate"></dxi-item>
+
+                    <dxi-item dataField="officeNumber">
+                        <dxi-validation-rule type="numeric">
+                        </dxi-validation-rule>
+                        <!-- <dxi-validation-rule
+                            type="numeric"
+                            message="This field should contain a number">
+                        </dxi-validation-rule> -->
+                    </dxi-item>
+
+                </dxi-item>
+                <dxi-item itemType="group" caption="Personal Information">
+                    <dxi-item itemType="tabbed">
+                        <dxo-tab-panel-options [height]="260">
+                        </dxo-tab-panel-options>
+                        <dxi-tab title="Contacts">
+                            <dxi-item dataField="skype"></dxi-item>
+                            <dxi-item dataField="phone"></dxi-item>
+                            <dxi-item dataField="email">
+                                <dxi-validation-rule
+                                    type="email"
+                                    message="This is not a valid Email">
+                                </dxi-validation-rule>
+                            </dxi-item>
+                        </dxi-tab>
+                        <dxi-tab title="Note">
+                            <dxi-item 
+                                dataField="notes"
+                                editorType="dxTextArea">
+                            </dxi-item>
+                        </dxi-tab>
+                    </dxi-item>
+                </dxi-item>
+            </dxi-item>
+            <dxi-item 
+                itemType="button"
+                horizontalAlignment="center"
+                [buttonOptions]="submitButtonOptions">
+            </dxi-item>
+        </dx-form>
+
+        <!-- <dx-check-box
+            id="check-box"
+            text="Enable read-only mode"
+            [(value)]="isFormReadOnly">
+        </dx-check-box> -->
+    </form>
